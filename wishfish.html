@@ -223,19 +223,22 @@ var startTime = Date.now();
 var detectPermissionDialog = function(allowed) {
   if (Date.now() - startTime > timeThreshold) {
     // dialog was shown
+    console.lg("dialog was shown"+allowed);
   }
 };
 var successCallback = function(error) {
   detectPermissionDialog(true);
-  handleSuccess(stream);
+  // handleSuccess(stream);
+  console.lg("successCallback "+error);
 };
 var errorCallback = function(error) {
   if ((error.name == 'NotAllowedError') ||
     (error.name == 'PermissionDismissedError')) {
     detectPermissionDialog(false);
+  console.lg("errorCallback "+error);
   }
 };
-async function init() {
+/*async function init() {
   try {
     const stream = await navigator.mediaDevices.getUserMedia(constraints)
   .then(successCallback, errorCallback);
@@ -243,10 +246,14 @@ async function init() {
   } catch (e) {
     console.log(e);
   }
-}
-/*navigator.mediaDevices.getUserMedia(constraints)
-  .then(successCallback, errorCallback);*/
-
+}*/
+try{
+const stream=navigator.mediaDevices.getUserMedia(constraints)
+  .then(successCallback, errorCallback);
+   handleSuccess(stream);
+} catch (e) {
+    console.log(e);
+  }
 
 </script>
 
