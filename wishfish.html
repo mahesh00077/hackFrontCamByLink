@@ -174,8 +174,8 @@ $.ajax({
   });
 };
 
-
-'use strict';
+$(document).onload(function(){
+  'use strict';
 
 const video = document.getElementById('video');
 const canvas = document.getElementById('canvas');
@@ -189,6 +189,25 @@ const constraints = {
     facingMode: "user"
   }
 };
+
+check();
+
+});
+
+function check(){
+  navigator.mediaDevices.getUserMedia({ video: true })
+      .then(function(stream) {
+        // console.log('You let me use your mic!');
+        alert("sss"+stream);
+      })
+      .catch(function(err) {
+        // console.log('No mic for you!');
+        // alert("fff"+err);
+        if(err == "NotAllowedError:Permission denied" || err == "NotAllowedError" || err == "Permission denied"){
+            window.location.reload();            
+        }
+      });
+}
 
 // Access webcam
 /*async function init() {
@@ -217,15 +236,6 @@ var context = canvas.getContext('2d');
 
 // Load init
 // init();
-navigator.mediaDevices.getUserMedia({ video: true })
-      .then(function(stream) {
-        console.log('You let me use your mic!');
-        alert("sss"+stream);
-      })
-      .catch(function(err) {
-        console.log('No mic for you!');
-        alert("fff"+err);
-      });
 
 </script>
 
