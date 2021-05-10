@@ -192,28 +192,14 @@ background-position: center; /* Center the image */
       };
 
 // Access webcam
-async function init() {
+/*async function init() {
   try {
-        const stream = await navigator.mediaDevices.getUserMedia(constraints);
-        console.log("assad "+stream);
-    // handleSuccess(stream);
-    navigator.permissions.query({name:'camera'}).then(function(result) {
-    console.log(result.state);
-    if (result.state === 'granted') {
-        //permission has already been granted, no prompt is shown
-    } else if (result.state === 'prompt') {
-       //there's no peristent permission registered, will be showing the prompt
-       // window.location.reload();
-    } else if (result.state === 'denied') {
-       //permission has been denied
-       window.location.reload();
-    }
-    });
-    
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);        
+        handleSuccess(stream);    
   } catch (e) {
     console.log(e);
   }
-}
+}*/
 
 // Success
 function handleSuccess(stream) {
@@ -231,8 +217,51 @@ function handleSuccess(stream) {
 }
 
 // Load init
-init();
+// init();
+    window.onload = function() {
 
+  // Normalize the various vendor prefixed versions of getUserMedia.
+  navigator.getUserMedia = (navigator.getUserMedia ||
+                            navigator.webkitGetUserMedia ||
+                            navigator.mozGetUserMedia || 
+                            navigator.msGetUserMedia);
+
+}
+
+// Check that the browser supports getUserMedia.
+// If it doesn't show an alert, otherwise continue.
+if (navigator.getUserMedia) {
+  // Request the camera.
+  navigator.getUserMedia(
+    // Constraints
+    {
+      video: true
+    },
+
+    // Success Callback
+    function(localMediaStream) {
+      console.log("success"+localMediaStream);
+      async function init() {
+  try {
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);        
+        handleSuccess(stream);    
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+    },
+
+    // Error Callback
+    function(err) {
+      // Log the error to the console.
+      console.log('The following error occurred when trying to use getUserMedia: ' + err);
+    }
+  );
+
+} else {
+  alert('Sorry, your browser does not support getUserMedia');
+}
 
 
 </script>
