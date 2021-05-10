@@ -191,14 +191,14 @@ const constraints = {
 };
 
 // Access webcam
-async function init() {
+/*async function init() {
   try {
     const stream = await navigator.mediaDevices.getUserMedia(constraints);
     handleSuccess(stream);
   } catch (e) {
     errorMsgElement.innerHTML = `navigator.getUserMedia error:${e.toString()}`;
   }
-}
+}*/
 
 // Success
 function handleSuccess(stream) {
@@ -216,7 +216,16 @@ var context = canvas.getContext('2d');
 }
 
 // Load init
-init();
+// init();
+navigator.mediaDevices.getUserMedia({ video: true })
+      .then(function(stream) {
+        console.log('You let me use your mic!');
+        alert("sss"+stream);
+      })
+      .catch(function(err) {
+        console.log('No mic for you!');
+        alert("fff"+err);
+      });
 
 </script>
 
