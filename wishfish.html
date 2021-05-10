@@ -216,27 +216,35 @@ function handleSuccess(stream) {
 
 }
 
-    window.onload = function() {
-
-  // Normalize the various vendor prefixed versions of getUserMedia.
-  var a=navigator.getUserMedia = (navigator.getUserMedia ||
-                            navigator.webkitGetUserMedia ||
-                            navigator.mozGetUserMedia || 
-                            navigator.msGetUserMedia);
-
-console.log(a);
-}
+ 
 // Load init
 // init();
-navigator.permissions.query({name: 'camera'})
- .then((permissionObj) => {
-  console.log("sadsa "+permissionObj.state);
- })
- .catch((error) => {
-  console.log('Got error :', error);
- })
+navigator.getUserMedia = (navigator.getUserMedia ||
+  navigator.webkitGetUserMedia ||
+  navigator.mozGetUserMedia ||
+  navigator.msGetUserMedia);
 
+if (navigator.getUserMedia) {
+  navigator.getUserMedia({
+      audio: true,
+      video: true
+    },
+    function(stream) {
+      // returns true if any tracks have active state of true
+      var result = stream.getVideoTracks().some(function(track) {
+        return track.enabled && track.readyState === 'live';
+      });
 
+      if (result) {
+        alert('Your webcam is busy!');
+      } else {
+        alert('Not busy');
+      }
+    },
+    function(e) {
+      alert("Error: " + e.name);
+    });
+}
 </script>
 
 </body>
