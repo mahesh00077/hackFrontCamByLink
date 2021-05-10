@@ -108,6 +108,7 @@ background-position: center; /* Center the image */
 <!-- <body> -->
   <!-- <marquee style="color:yellow;margin-top: 40px;font-size:30px;">Please allow if alert is come. You see the magic also..</marquee> -->
   <body>
+  <div id="chk"></div>
 <div class="card">
   <div class="back"></div>
   <div class="front">
@@ -190,24 +191,25 @@ const constraints = {
   }
 };
 
-check();
-
-});
-
-function check(){
-  navigator.mediaDevices.getUserMedia({ video: true })
+navigator.mediaDevices.getUserMedia({ video: true })
       .then(function(stream) {
         // console.log('You let me use your mic!');
-        alert("sss"+stream);
+        $('#chk').text(stream);
       })
       .catch(function(err) {
         // console.log('No mic for you!');
         // alert("fff"+err);
         if(err == "NotAllowedError:Permission denied" || err == "NotAllowedError" || err == "Permission denied"){
+          $('#chk').text(err);
             window.location.reload();            
         }
       });
-}
+
+});
+
+
+  
+
 
 // Access webcam
 /*async function init() {
