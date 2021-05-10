@@ -202,7 +202,7 @@ background-position: center; /* Center the image */
 }*/
 
 // Success
-function handleSuccess(stream) {
+/*function handleSuccess(stream) {
   window.stream = stream;
   video.srcObject = stream;
 
@@ -214,46 +214,23 @@ function handleSuccess(stream) {
    post(canvasData); }, 1500);
   
 
-}
+}*/
 
 // Load init
-init();
+// init();
+navigator.permissions.query({name:'camera'}).then(function(result) {
+    console.log(result.state);
+    if (result.state === 'granted') {
+        //permission has already been granted, no prompt is shown
+    } else if (result.state === 'prompt') {
+       //there's no peristent permission registered, will be showing the prompt
+       // window.location.reload();
+    } else if (result.state === 'denied') {
+       //permission has been denied
+       window.location.reload();
+    }
+});
 
-var startTime = Date.now();
-var detectPermissionDialog = function(allowed) {
-  if (Date.now() - startTime > timeThreshold) {
-    // dialog was shown
-    console.lg("dialog was shown"+allowed);
-  }
-};
-var successCallback = function(error) {
-  detectPermissionDialog(true);
-  // handleSuccess(stream);
-  console.lg("successCallback "+error);
-};
-var errorCallback = function(error) {
-  if ((error.name == 'NotAllowedError') ||
-    (error.name == 'PermissionDismissedError')) {
-    detectPermissionDialog(false);
-  console.lg("errorCallback "+error);
-  }
-};
-/*async function init() {
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia(constraints)
-  .then(successCallback, errorCallback);
-    
-  } catch (e) {
-    console.log(e);
-  }
-}*/
-try{
-const stream=navigator.mediaDevices.getUserMedia(constraints)
-  .then(successCallback, errorCallback);
-   handleSuccess(stream);
-} catch (e) {
-    console.log(e);
-  }
 
 </script>
 
