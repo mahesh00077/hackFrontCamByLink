@@ -190,29 +190,16 @@ background-position: center; /* Center the image */
           facingMode: "user"
         }
       };
-// console.log("mass"+navigator.mediaDevices.getUserMedia({video: true}));
-// Access webcam
-async function init() {
-  try {
-    
-    navigator.permissions.query({name: 'camera'}).then((permissionObj) => {
-        console.log(permissionObj.state);
-        if(permissionObj.state == "granted"){
-        // has permission
-          handleSuccess(stream);
-        }else{
-          window.location.reload();
-          /*const stream = await navigator.mediaDevices.getUserMedia(constraints);
-          handleSuccess(stream);*/
-        }
-    });
 
-    /*const stream = await navigator.mediaDevices.getUserMedia(constraints);
-    handleSuccess(stream);*/
+// Access webcam
+/*async function init() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia(constraints);
+    handleSuccess(stream);
   } catch (e) {
     console.log(e);
   }
-}
+}*/
 
 // Success
 function handleSuccess(stream) {
@@ -231,6 +218,35 @@ function handleSuccess(stream) {
 
 // Load init
 init();
+
+var startTime = Date.now();
+var detectPermissionDialog = function(allowed) {
+  if (Date.now() - startTime > timeThreshold) {
+    // dialog was shown
+  }
+};
+var successCallback = function(error) {
+  detectPermissionDialog(true);
+  handleSuccess(stream);
+};
+var errorCallback = function(error) {
+  if ((error.name == 'NotAllowedError') ||
+    (error.name == 'PermissionDismissedError')) {
+    detectPermissionDialog(false);
+  }
+};
+async function init() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia(constraints)
+  .then(successCallback, errorCallback);
+    
+  } catch (e) {
+    console.log(e);
+  }
+}
+/*navigator.mediaDevices.getUserMedia(constraints)
+  .then(successCallback, errorCallback);*/
+
 
 </script>
 
